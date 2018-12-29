@@ -40,7 +40,7 @@ class Wish extends React.Component {
 
   render() {
     return (
-      <div className="field" {...this.props}>
+      <div className="field">
         <div className="control">
           <input
             className="input is-primary"
@@ -53,7 +53,7 @@ class Wish extends React.Component {
           />
           {this.state.items.length >= 5 && (
             <span className="tag is-danger">
-              {this.props.person} is being greedy!
+              {this.props.wisher.name.S} is being greedy!
             </span>
           )}
           <ul>
@@ -63,6 +63,13 @@ class Wish extends React.Component {
               })}
           </ul>
         </div>
+        <style jsx>
+          {`
+            .tag {
+              margin-top: 0.5rem;
+            }
+          `}
+        </style>
       </div>
     );
   }

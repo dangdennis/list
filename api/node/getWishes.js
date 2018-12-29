@@ -1,12 +1,15 @@
-// require('dotenv').config({ path: '../../.env' });
+const env = require('dotenv').config();
+console.log(env);
 const config = require('../config');
 const AWS = require('aws-sdk');
+const { json, send } = require('micro');
 
 AWS.config.update({
   region: 'us-west-2',
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    accessKeyId: process.env.AWS_DDB_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_DDB_SECRET_KEY,
+    sessionToken: process.env.AWS_SESSION_TOKEN
   }
 });
 
@@ -22,11 +25,10 @@ module.exports = (req, res) => {
   ddb.scan(params, function(err, data) {
     if (err) {
       console.log('Error', err);
-      res.end(JSON.stringify(err));
+      send(res, 500, err);
     } else {
       console.log('Success', data);
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(data));
+      send(res, 200, data);
     }
   });
 };

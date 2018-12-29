@@ -1,6 +1,5 @@
 import React from 'react';
 import App, { Container } from 'next/app';
-import { Provider as UnstatedProvider } from 'unstated';
 import 'bulma/bulma.sass';
 
 class MyApp extends App {
@@ -19,9 +18,7 @@ class MyApp extends App {
 
     return (
       <Container>
-        <UnstatedProvider>
-          <Component {...pageProps} />
-        </UnstatedProvider>
+        <Component {...pageProps} />
       </Container>
     );
   }

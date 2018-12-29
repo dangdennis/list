@@ -1,30 +1,30 @@
 import React from 'react';
-import { Subscribe } from 'unstated';
-import WishListContainer from '../container/WishListContainer';
 
 class TextInput extends React.Component {
   render() {
     return (
-      <Subscribe to={[WishListContainer]}>
-        {wishlist => (
-          <div className="field has-addons" {...this.props}>
-            <div className="control is-expanded">
-              <input
-                className="input is-primary"
-                name="name"
-                type="text"
-                placeholder="Enter name"
-                onChange={wishlist.handleChange}
-                onKeyPress={wishlist.handleKeyPress}
-                value={wishlist.state.name}
-              />
-            </div>
-            <div className="control">
-              <button onClick={wishlist.handleWishClick} className="button is-info">Wish!</button>
-            </div>
-          </div>
-        )}
-      </Subscribe>
+      <div className="field has-addons">
+        <div className="control is-expanded">
+          <input
+            className="input is-primary"
+            name="name"
+            type="text"
+            placeholder="Enter name"
+            onChange={this.props.handleChange}
+            onKeyPress={this.props.handleKeyPress}
+            value={this.props.text}
+            disabled={this.props.loading}
+          />
+        </div>
+        <div className="control">
+          <button
+            onClick={this.props.handleWishClick}
+            className={`button is-info ${this.props.loading && 'is-loading'}`}
+          >
+            Wish!
+          </button>
+        </div>
+      </div>
     );
   }
 }

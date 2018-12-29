@@ -1,29 +1,23 @@
 import React, { Component } from 'react';
-import { Subscribe } from 'unstated';
-import WishListContainer from '../container/WishListContainer';
 import Wish from './Wish';
 
 export default class Wishes extends Component {
   render() {
     return (
-      <div>
-        <Subscribe to={[WishListContainer]}>
-          {({ state: { wishers } }) => {
+      <div className="grid">
+        {this.props.wishers.length > 0 &&
+          this.props.wishers.map((wisher, idx) => {
+            let name = wisher.name.S;
+            if (name.length > 15) {
+              name = name.slice(0, 15) + "..."
+            }
             return (
-              <div className="grid">
-                {wishers.length > 0 &&
-                  wishers.map((wisher, idx) => {
-                    return (
-                      <div key={wisher.user_id.S + idx} className="grid-item">
-                        <h4 className="title is-4">{wisher.name.S}</h4>
-                        <Wish name={wisher.name.S} />
-                      </div>
-                    );
-                  })}
+              <div key={wisher.user_id.S + idx} className="grid-item">
+                <h4 className="title is-4">{name}</h4>
+                <Wish wisher={wisher} />
               </div>
             );
-          }}
-        </Subscribe>
+          })}
         <style jsx>{`
           .grid {
             display: grid;

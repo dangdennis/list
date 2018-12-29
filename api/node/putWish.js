@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '../../.env' });
+const env = require('dotenv').config();
+console.log(env);
 const config = require('../config');
 const AWS = require('aws-sdk');
 const uuid = require('uuid/v4');
@@ -8,7 +9,8 @@ AWS.config.update({
   region: 'us-west-2',
   credentials: {
     accessKeyId: process.env.AWS_DDB_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_DDB_SECRET_KEY
+    secretAccessKey: process.env.AWS_DDB_SECRET_KEY,
+    sessionToken: process.env.AWS_SESSION_TOKEN
   }
 });
 
@@ -32,7 +34,7 @@ module.exports = async (req, res) => {
     console.log('json data: ', data);
 
     let wishes = [];
-    if (data.wishes.length) {
+    if (data.wishes && data.wishes.length) {
       wishes = data.wishes.map(wish => {
         return {
           S: wish
@@ -43,7 +45,7 @@ module.exports = async (req, res) => {
     let params = {
       TableName: config.TABLE_NAME,
       Item: {
-        user_id: { S: '6b943b64-c92a-497b-bbc4-b48a081b5cf9' },
+        user_id: { S: data.user_id ? String(data.user_id) : String(uuid()) },
         time_stamp: { N: String(Date.now()) },
         wishlist: { L: wishes },
         name: {

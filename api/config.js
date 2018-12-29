@@ -1,3 +1,3 @@
 module.exports = {
-  TABLE_NAME: 'kbb-dd-wishlist-2018',
+  TABLE_NAME: 'dd-wishlist',
 };
