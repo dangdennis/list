@@ -7,16 +7,35 @@ import axios from 'axios';
 
 import Counter from '../components/Counter';
 
+// Getting some weird circular JSON when fetching api/node/wishes
+// Using this as a workaround for axios
+// https://github.com/axios/axios/issues/836
+const handle_axios_error = function(err) {
+  if (err.response) {
+    const custom_error = new Error(
+      err.response.statusText || 'Internal server error'
+    );
+    custom_error.status = err.response.status || 500;
+    custom_error.description = err.response.data
+      ? err.response.data.message
+      : null;
+    throw custom_error;
+  }
+  throw new Error(err);
+};
+axios.interceptors.response.use(r => r, handle_axios_error);
+
 export default class IndexPage extends React.Component {
   static async getInitialProps({ req }) {
     try {
-      const res = await axios.get('http://localhost:8004/api/node/wishes');
-      console.log(res);
-      if (res.data) {
+      const res = await axios.get('/api/node/wishes');
+      // console.log(res);
+      if (res.data && res.data.Items) {
         return {
           wishers: [...res.data.Items]
         };
       }
+      return {};
     } catch (e) {
       return { error: e };
     }
@@ -73,7 +92,7 @@ export default class IndexPage extends React.Component {
   async _createNewWisher(name) {
     this.setState({ loading: true, error: false });
     try {
-      const res = await axios.post('http://localhost:8004/api/node/wish', {
+      const res = await axios.post('/api/node/wish', {
         name,
         wishes: []
       });
@@ -117,7 +136,7 @@ export default class IndexPage extends React.Component {
                 className="delete"
                 onClick={() => this.setState({ error: false })}
               />
-              Something went wrong!
+              Sorry, something went wrong! Please try again later.
             </div>
           )}
           {this.state.wishers && <Wishes wishers={this.state.wishers} />}
