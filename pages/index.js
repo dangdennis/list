@@ -29,7 +29,6 @@ export default class IndexPage extends React.Component {
   static async getInitialProps({ req }) {
     try {
       const res = await axios.get('/api/node/wishes');
-      // console.log(res);
       if (res.data && res.data.Items) {
         return {
           wishers: [...res.data.Items]
@@ -49,13 +48,6 @@ export default class IndexPage extends React.Component {
       wishers: props.wishers || [],
       loading: false
     };
-  }
-
-  async fetchAllWishes() {
-    console.log('fetching all wishes');
-    const res = await fetch('api/node/wishes').then(res => res.json());
-    console.log('all wishes:', res);
-    this.setState({ wishers: [...res.Items] });
   }
 
   handleChange = e => {
