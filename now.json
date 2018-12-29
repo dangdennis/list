@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "name": "wishlist",
+  "builds": [
+    { "src": "next.config.js", "use": "@now/next" },
+    { "src": "api/node/*.js", "use": "@now/node" }
+  ],
+  "env": {
+    "AWS_DDB_ACCESS_KEY": "@aws_access_key",
+    "AWS_DDB_SECRET_KEY": "@aws_secret_key"
+  },
+  "routes": [
+    {
+      "src": "/api/node/wishes",
+      "dest": "/api/node/getWishes.js"
+    },
+    {
+      "src": "/api/node/wish",
+      "dest": "/api/node/putWish.js",
+      "methods": ["POST"]
+    },
+    {
+      "src": "/api/node/wish?<id>[^/]*",
+      "dest": "/api/node/getWish.js?id=$id",
+      "methods": ["GET"]
+    }
+  ]
+}

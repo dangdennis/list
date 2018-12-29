@@ -1,0 +1,29 @@
+{
+  "name": "fam-wishlist",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "now:dev": "now-lambda",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "@zeit/next-sass": "^1.0.1",
+    "aws-sdk": "^2.376.0",
+    "axios": "^0.18.0",
+    "bulma": "^0.7.2",
+    "clear": "^0.1.0",
+    "dotenv": "^6.2.0",
+    "micro": "^9.3.3",
+    "next": "^7.0.2",
+    "node-sass": "^4.11.0",
+    "now-lambda-runner": "^2.0.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "unstated": "^2.1.1",
+    "uuid": "^3.3.2"
+  },
+  "license": "ISC",
+  "devDependencies": {}
+}
