@@ -9,7 +9,7 @@ module.exports = (phase, { defaultConfig }) => {
       /* production only config */
     };
   }
-  const withCSS = require('@zeit/next-css');
+  // const withCSS = require('@zeit/next-css');
   const withSASS = require('@zeit/next-sass');
-  return withCSS(withSASS());
+  return withSASS();
 };

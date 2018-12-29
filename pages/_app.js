@@ -1,7 +1,7 @@
 import React from 'react';
 import App, { Container } from 'next/app';
 import { Provider as UnstatedProvider } from 'unstated';
-import 'bulma/css/bulma.min.css';
+import 'bulma/bulma.sass';
 
 class MyApp extends App {
   static async getInitialProps({ Component, router, ctx }) {

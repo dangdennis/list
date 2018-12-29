@@ -4,6 +4,8 @@ import Navbar from '../components/Navbar';
 import TextInput from '../components/TextInput';
 import Wishes from '../components/Wishes';
 
+import Counter from '../components/Counter';
+
 export default class IndexPage extends React.Component {
   state = {
     name: '',
@@ -18,6 +20,7 @@ export default class IndexPage extends React.Component {
           <h1 className="title is-2" style={{ textAlign: 'center' }}>
             Hopeful wishing
           </h1>
+          {/* <Counter /> */}
           <div className="main-input">
             <TextInput />
           </div>

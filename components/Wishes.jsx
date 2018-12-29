@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 import WishListContainer from '../container/WishListContainer';
 import Wish from './Wish';
+
 export default class Wishes extends Component {
   render() {
     return (

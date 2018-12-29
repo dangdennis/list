@@ -1,8 +1,8 @@
 module.exports = {
   NODE: {
-    delete: 'api/node/deleteWish.js',
-    put: 'api/node/wish',
-    get: 'api/node/getWish.js',
-    getAll: 'api/node/wishes'
+    deleteWish: 'api/node/deleteWish.js',
+    putWish: 'api/node/wish',
+    getWish: 'api/node/getWish.js',
+    getAllWishes: 'api/node/wishes'
   }
 };

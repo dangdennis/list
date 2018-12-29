@@ -30,12 +30,12 @@ class Wish extends React.Component {
   };
 
   async addWish(text = '') {
-    const res = await axios.post('/api/wish/putWish', {
-      wishes: [text],
-      name: this.props.name
-    });
-    console.log(res);
-    console.log('wish added successfully');
+    // const res = await axios.post('/api/wish/putWish', {
+    //   wishes: [text],
+    //   name: this.props.name
+    // });
+    // console.log(res);
+    // console.log('wish added successfully');
   }
 
   render() {
@@ -52,7 +52,7 @@ class Wish extends React.Component {
             value={this.state.name}
           />
           {this.state.items.length >= 5 && (
-            <span class="tag is-danger">
+            <span className="tag is-danger">
               {this.props.person} is being greedy!
             </span>
           )}
