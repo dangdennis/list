@@ -28,7 +28,7 @@ axios.interceptors.response.use(r => r, handle_axios_error);
 export default class IndexPage extends React.Component {
   static async getInitialProps({ req }) {
     try {
-      const res = await axios.get('/api/node/wishes');
+      const res = await axios.get('http://localhost:8004/api/node/wishes');
       if (res.data && res.data.Items) {
         return {
           wishers: [...res.data.Items]
@@ -84,7 +84,7 @@ export default class IndexPage extends React.Component {
   async _createNewWisher(name) {
     this.setState({ loading: true, error: false });
     try {
-      const res = await axios.post('/api/node/wish', {
+      const res = await axios.post('http://localhost:8004/api/node/wish', {
         name,
         wishes: []
       });

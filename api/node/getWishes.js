@@ -1,4 +1,4 @@
-const env = require('dotenv').config({ path: '../../.env' });
+const env = require('dotenv').config();
 console.log(env);
 const config = require('../config');
 const AWS = require('aws-sdk');
@@ -8,8 +8,7 @@ AWS.config.update({
   region: 'us-west-2',
   credentials: {
     accessKeyId: process.env.AWS_DDB_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_DDB_SECRET_KEY,
-    sessionToken: process.env.AWS_SESSION_TOKEN
+    secretAccessKey: process.env.AWS_DDB_SECRET_KEY
   }
 });
 
