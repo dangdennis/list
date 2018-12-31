@@ -1,8 +1,8 @@
 const env = require('dotenv').config();
-console.log(env);
 const config = require('../config');
 const AWS = require('aws-sdk');
-const { json, send } = require('micro');
+const { send } = require('micro');
+console.log(env);
 
 AWS.config.update({
   region: 'us-west-2',
@@ -12,7 +12,6 @@ AWS.config.update({
   }
 });
 
-// Create the DynamoDB service object
 ddb = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
 
 const params = {
@@ -20,13 +19,19 @@ const params = {
 };
 
 module.exports = (req, res) => {
-  //  ddb scans and returns all items
+  // Queries for all the wishes in DynamoDB
   ddb.scan(params, function(err, data) {
     if (err) {
-      console.log('Error', err);
       send(res, 500, err);
     } else {
-      console.log('Success', data);
+      // Items is returned as an array
+      if (data.Items && data.Items.length) {
+        // Unmarshall, aka reformat, the results to regular JSON format
+        let unmarshalled = data.Items.map(item =>
+          AWS.DynamoDB.Converter.unmarshall(item)
+        );
+        data.Items = unmarshalled; // We want to keep the other data points from DynamoDB
+      }
       send(res, 200, data);
     }
   });

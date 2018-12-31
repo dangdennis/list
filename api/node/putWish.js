@@ -1,16 +1,15 @@
 const env = require('dotenv').config();
-console.log(env);
 const config = require('../config');
 const AWS = require('aws-sdk');
 const uuid = require('uuid/v4');
 const { json, send } = require('micro');
+console.log(env);
 
 AWS.config.update({
   region: 'us-west-2',
   credentials: {
     accessKeyId: process.env.AWS_DDB_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_DDB_SECRET_KEY,
-    sessionToken: process.env.AWS_SESSION_TOKEN
+    secretAccessKey: process.env.AWS_DDB_SECRET_KEY
   }
 });
 
