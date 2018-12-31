@@ -7,12 +7,12 @@ export default class Wishes extends Component {
       <div className="grid">
         {this.props.wishers.length > 0 &&
           this.props.wishers.map((wisher, idx) => {
-            let name = wisher.name.S;
+            let name = wisher.name;
             if (name.length > 15) {
               name = name.slice(0, 15) + "..."
             }
             return (
-              <div key={wisher.user_id.S + idx} className="grid-item">
+              <div key={wisher.user_id + idx} className="grid-item">
                 <h4 className="title is-4">{name}</h4>
                 <Wish wisher={wisher} />
               </div>

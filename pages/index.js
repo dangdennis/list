@@ -28,7 +28,7 @@ axios.interceptors.response.use(r => r, handle_axios_error);
 export default class IndexPage extends React.Component {
   static async getInitialProps({ req }) {
     try {
-      const res = await axios.get('/api/node/wishes');
+      const res = await axios.get('http://localhost:8004/api/node/wishes');
       if (res.data && res.data.Items) {
         return {
           wishers: [...res.data.Items]
@@ -60,7 +60,7 @@ export default class IndexPage extends React.Component {
     const { type, value } = e.target;
     const val = type === 'number' ? parseFloat(value) : value;
     if (e.key === 'Enter' && val) {
-      this._createNewWisher(val);
+      this.createWisher(val);
     }
   };
 
@@ -69,19 +69,19 @@ export default class IndexPage extends React.Component {
       return;
     }
     const val = this.state.name;
-    this._createNewWisher(val);
+    this.createWisher(val);
   };
 
-  _createWisher(name) {
+  _formatWisher(name) {
     return {
-      time_stamp: { N: Date.now() },
-      user_id: { S: '' },
-      name: { S: name },
-      wishlist: { L: [] }
+      time_stamp: Date.now(),
+      user_id: '',
+      name,
+      wishlist: []
     };
   }
 
-  async _createNewWisher(name) {
+  async createWisher(name) {
     this.setState({ loading: true, error: false });
     try {
       const res = await axios.post('/api/node/wish', {
@@ -92,7 +92,7 @@ export default class IndexPage extends React.Component {
       this.setState({
         loading: false,
         name: '',
-        wishers: [...this.state.wishers, this._createWisher(name)]
+        wishers: [...this.state.wishers, this._formatWisher(name)]
       });
     } catch (e) {
       console.error('post fail', e);
@@ -100,7 +100,7 @@ export default class IndexPage extends React.Component {
         loading: false,
         name: '',
         error: true,
-        wishers: [...this.state.wishers, this._createWisher(name)]
+        wishers: [...this.state.wishers, this._formatWisher(name)]
       });
     }
   }
@@ -129,7 +129,7 @@ export default class IndexPage extends React.Component {
                 className="delete"
                 onClick={() => this.setState({ error: false })}
               />
-              Sorry, something's wrong on our end! Your name will not be saved.
+              Sorry, something's wrong on our end! Your name was not saved.
             </div>
           )}
           {this.state.wishers && <Wishes wishers={this.state.wishers} />}

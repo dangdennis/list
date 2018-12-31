@@ -4,9 +4,7 @@ import axios from 'axios';
 class Wish extends React.Component {
   static defaultProps = {
     wisher: {
-      wishlist: {
-        L: []
-      }
+      wishlist: []
     }
   };
 
@@ -15,7 +13,7 @@ class Wish extends React.Component {
 
     this.state = {
       editing: false,
-      wishes: [...this.props.wisher.wishlist.L],
+      wishes: [...this.props.wisher.wishlist],
       name: ''
     };
   }
@@ -39,7 +37,7 @@ class Wish extends React.Component {
       this.addWish(val);
       this.setState({
         [name]: '',
-        wishes: [...this.state.wishes, this._createWish(val)]
+        wishes: [...this.state.wishes, val]
       });
     }
   };
@@ -48,7 +46,7 @@ class Wish extends React.Component {
     try {
       console.log('adding wish', wish);
       // const res = await axios.post('/api/wish/putWish', {
-      //   wishes: [...this.state.wishes, this._createWish(wish)],
+      //   wishes: [...this.state.wishes, wish],
       //   name: this.props.name
       // });
       // console.log(res);
@@ -57,12 +55,6 @@ class Wish extends React.Component {
       console.error(e);
       this.setState({ error: true });
     }
-  }
-
-  _createWish(wish) {
-    return {
-      S: wish
-    };
   }
 
   render() {
@@ -80,7 +72,7 @@ class Wish extends React.Component {
           />
           {this.state.wishes.length >= 5 && (
             <span className="tag is-danger">
-              {this.props.wisher.name.S} is being greedy!
+              {this.props.wisher.name} is being greedy!
             </span>
           )}
           <ul>
