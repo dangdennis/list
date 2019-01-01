@@ -102,7 +102,7 @@ export default class IndexPage extends React.Component {
 
   deleteWisher = async id => {
     try {
-      await axios.delete(`${DEV && 'http://localhost:8004'}/api/node/wish`, {
+      await axios.delete(`${DEV && 'http://localhost:8004'}/api/node/wish/delete`, {
         data: {
           user_id: id
         }

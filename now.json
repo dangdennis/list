@@ -12,10 +12,11 @@
   "routes": [
     {
       "src": "/api/node/wishes",
-      "dest": "/api/node/getWishes.js"
+      "dest": "/api/node/getWishes.js",
+      "methods": ["GET"]
     },
     {
-      "src": "/api/node/wish",
+      "src": "/api/node/wish/delete",
       "dest": "/api/node/deleteWish.js",
       "methods": ["DELETE"]
     },

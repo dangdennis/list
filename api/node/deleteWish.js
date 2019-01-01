@@ -14,8 +14,12 @@ AWS.config.update({
 const ddb = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
 
 module.exports = async (req, res) => {
+  console.log('DELETE WISH');
   try {
     const data = await json(req);
+    if (!data.user_id) {
+      send(res, 500, { message: 'No user id' });
+    }
 
     let params = {
       TableName: config.TABLE_NAME,
@@ -27,7 +31,6 @@ module.exports = async (req, res) => {
     ddb.deleteItem(params, (err, data) => {
       if (err) {
         console.log('Error', err);
-        send(res, 500, err);
       } else {
         console.log('Success', data);
         send(res, 200, data);
