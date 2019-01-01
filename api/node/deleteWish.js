@@ -1,6 +1,7 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config();
 const config = require('../config');
 const AWS = require('aws-sdk');
+const { json, send } = require('micro');
 
 AWS.config.update({
   region: 'us-west-2',
@@ -10,30 +11,31 @@ AWS.config.update({
   }
 });
 
-// Create the DynamoDB service object
-ddb = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
+const ddb = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
 
-const params = {
-  TableName: config.TABLE_NAME,
-  Key: {
-    UserId: { S: 'Dennis Dang' },
-    ItemId: { S: '001' }
+module.exports = async (req, res) => {
+  try {
+    const data = await json(req);
+
+    let params = {
+      TableName: config.TABLE_NAME,
+      Key: {
+        user_id: { S: data.user_id && String(data.user_id) }
+      }
+    };
+
+    ddb.deleteItem(params, (err, data) => {
+      if (err) {
+        console.log('Error', err);
+        send(res, 500, err);
+      } else {
+        console.log('Success', data);
+        send(res, 200, data);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const error = { error: e };
+    send(res, 500, error);
   }
-  // ProjectionExpression: 'UserId'
-};
-
-module.exports = (req, res) => {
-  // Call DynamoDB to read the item from the table
-  // ddb.deleteItem(params, function(err, data) {
-  //   res.writeHead(200, { 'Content-Type': 'text/html' });
-  //   if (err) {
-  //     console.log('Error', err);
-  //     res.write(err.toString());
-  //     res.end();
-  //   } else {
-  //     console.log('Success', data);
-  //     res.write(data.toString());
-  //     res.end();
-  //   }
-  // });
 };

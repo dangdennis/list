@@ -9,11 +9,17 @@ export default class Wishes extends Component {
           this.props.wishers.map((wisher, idx) => {
             let name = wisher.name;
             if (name.length > 15) {
-              name = name.slice(0, 15) + "..."
+              name = name.slice(0, 15) + '...';
             }
             return (
               <div key={wisher.user_id + idx} className="grid-item">
-                <h4 className="title is-4">{name}</h4>
+                <h4 className="title is-4">
+                  {name}{' '}
+                  <button
+                    className="delete is-medium"
+                    onClick={() => this.props.deleteWisher(wisher.user_id)}
+                  />
+                </h4>
                 <Wish wisher={wisher} />
               </div>
             );
@@ -26,6 +32,16 @@ export default class Wishes extends Component {
             justify-items: center;
             align-items: start;
           }
+
+          .title {
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .delete:hover {
+              background: rgb(229, 26, 102)
+              transition: 0.25s;
+            }
         `}</style>
       </div>
     );

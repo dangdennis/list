@@ -16,13 +16,13 @@
     },
     {
       "src": "/api/node/wish",
-      "dest": "/api/node/putWish.js",
-      "methods": ["POST"]
+      "dest": "/api/node/deleteWish.js",
+      "methods": ["DELETE"]
     },
     {
-      "src": "/api/node/wish?<id>[^/]*",
-      "dest": "/api/node/getWish.js?id=$id",
-      "methods": ["GET"]
+      "src": "/api/node/wish",
+      "dest": "/api/node/putWish.js",
+      "methods": ["POST"]
     }
   ]
 }

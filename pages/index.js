@@ -2,10 +2,11 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import TextInput from '../components/TextInput';
 import Wishes from '../components/Wishes';
-import 'isomorphic-fetch';
 import axios from 'axios';
 
-import Counter from '../components/Counter';
+// Flipper for local lambda development
+import global from '../global';
+const { DEV } = global;
 
 // Getting some weird circular JSON when fetching api/node/wishes
 // Using this as a workaround for axios
@@ -28,15 +29,16 @@ axios.interceptors.response.use(r => r, handle_axios_error);
 export default class IndexPage extends React.Component {
   static async getInitialProps({ req }) {
     try {
-      const res = await axios.get('http://localhost:8004/api/node/wishes');
-      if (res.data && res.data.Items) {
+      const { data } = await axios.get(
+        `${DEV && 'http://localhost:8004'}/api/node/wishes`
+      );
+      if (data && data.Items && data.Items.length) {
         return {
-          wishers: [...res.data.Items]
+          wishers: [...data.Items]
         };
       }
-      return {};
-    } catch (e) {
-      return { error: e };
+    } catch (error) {
+      return { error };
     }
   }
 
@@ -45,49 +47,42 @@ export default class IndexPage extends React.Component {
     this.state = {
       error: false,
       name: '',
-      wishers: props.wishers || [],
-      loading: false
+      loading: false,
+      wishers: props.wishers || []
     };
   }
 
+  // Handles the main text input
   handleChange = e => {
     const { name, type, value } = e.target;
     const val = type === 'number' ? parseFloat(value) : value;
     this.setState({ [name]: val, error: false });
   };
 
+  // Necessary to trigger on Enter key press
   handleKeyPress = e => {
     const { type, value } = e.target;
     const val = type === 'number' ? parseFloat(value) : value;
-    if (e.key === 'Enter' && val) {
+    if (val && e.key === 'Enter') {
       this.createWisher(val);
     }
   };
 
   handleWishClick = e => {
-    if (!this.state.name) {
-      return;
-    }
-    const val = this.state.name;
-    this.createWisher(val);
+    if (!this.state.name) return;
+    this.createWisher(this.state.name);
   };
-
-  _formatWisher(name) {
-    return {
-      time_stamp: Date.now(),
-      user_id: '',
-      name,
-      wishlist: []
-    };
-  }
 
   async createWisher(name) {
     this.setState({ loading: true, error: false });
     try {
-      const res = await axios.post('/api/node/wish', {
-        name,
-        wishes: []
-      });
+      const res = await axios.post(
+        `${DEV && 'http://localhost:8004'}/api/node/wish`,
+        {
+          name,
+          wishes: []
+        }
+      );
       console.log('post success', res);
       this.setState({
         loading: false,
@@ -105,14 +100,40 @@ export default class IndexPage extends React.Component {
     }
   }
 
+  deleteWisher = async id => {
+    try {
+      await axios.delete(`${DEV && 'http://localhost:8004'}/api/node/wish`, {
+        data: {
+          user_id: id
+        }
+      });
+      const wishers = this.state.wishers.filter(
+        wisher => wisher.user_id !== id
+      );
+      this.setState({ wishers });
+    } catch (e) {
+      console.error(e);
+      this.setState({ error: true });
+    }
+  };
+
+  // Formats the wish into compatible format
+  _formatWisher(name) {
+    return {
+      time_stamp: Date.now(),
+      user_id: '',
+      name,
+      wishlist: []
+    };
+  }
+
   render() {
-    console.log('index props', this.props);
     return (
       <main className="main">
         <div className="main-content">
           <Navbar />
           <h1 className="title is-2" style={{ textAlign: 'center' }}>
-            Hopeful wishing
+            Make some damn wishes
           </h1>
           <div className="main-input">
             <TextInput
@@ -129,10 +150,15 @@ export default class IndexPage extends React.Component {
                 className="delete"
                 onClick={() => this.setState({ error: false })}
               />
-              Sorry, something's wrong on our end! Your name was not saved.
+              Sorry, something's wrong on our end! Your change was not saved.
             </div>
           )}
-          {this.state.wishers && <Wishes wishers={this.state.wishers} />}
+          {this.state.wishers && (
+            <Wishes
+              wishers={this.state.wishers}
+              deleteWisher={this.deleteWisher}
+            />
+          )}
         </div>
         <style jsx>{`
           .main {

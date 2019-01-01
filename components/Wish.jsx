@@ -1,16 +1,16 @@
 import React from 'react';
 import axios from 'axios';
-
+import global from '../global';
+const { DEV } = global;
 class Wish extends React.Component {
   static defaultProps = {
     wisher: {
-      wishlist: []
+      wishes: []
     }
   };
 
   constructor(props) {
     super(props);
-
     this.state = {
       editing: false,
       wishes: [...this.props.wisher.wishlist],
@@ -19,42 +19,56 @@ class Wish extends React.Component {
   }
 
   handleChange = e => {
-    if (this.state.wishes.length >= 5) {
-      return;
-    }
+    if (this.state.wishes.length >= 5) return;
     const { name, type, value } = e.target;
     const val = type === 'number' ? parseFloat(value) : value;
     this.setState({ [name]: val, error: false });
   };
 
   handleKeyPress = async e => {
-    if (this.state.wishes.length >= 5) {
-      return;
-    }
+    if (this.state.wishes.length >= 5) return;
     const { name, type, value } = e.target;
     const val = type === 'number' ? parseFloat(value) : value;
     if (e.key === 'Enter' && val && this.state.wishes.length < 5) {
-      this.addWish(val);
-      this.setState({
-        [name]: '',
-        wishes: [...this.state.wishes, val]
-      });
+      this.setState(
+        {
+          [name]: '',
+          wishes: [...this.state.wishes, val]
+        },
+        () => {
+          this.putWish();
+        }
+      );
     }
   };
 
-  async addWish(wish = '') {
+  async putWish() {
     try {
-      console.log('adding wish', wish);
-      // const res = await axios.post('/api/wish/putWish', {
-      //   wishes: [...this.state.wishes, wish],
-      //   name: this.props.name
-      // });
-      // console.log(res);
-      console.log('wish added successfully');
+      await axios.post(
+        `${DEV && 'http://localhost:8004'}/api/node/wish`,
+        this.createWish()
+      );
     } catch (e) {
       console.error(e);
       this.setState({ error: true });
     }
+  }
+
+  deleteWish(idx) {
+    const wishes = this.state.wishes.filter((wish, index) => idx !== index);
+    this.setState({ wishes }, () => {
+      this.putWish();
+    });
+  }
+
+  // Formats the wish into compatible format
+  createWish() {
+    return {
+      time_stamp: Date.now(),
+      user_id: this.props.wisher.user_id,
+      name: this.props.wisher.name,
+      wishlist: this.state.wishes
+    };
   }
 
   render() {
@@ -75,17 +89,34 @@ class Wish extends React.Component {
               {this.props.wisher.name} is being greedy!
             </span>
           )}
-          <ul>
+          <ul className="wishlist">
             {this.state.wishes.length > 0 &&
               this.state.wishes.map((item, idx) => {
-                return <li key={item + idx}>{item}</li>;
+                return (
+                  <li className="wish" key={item + idx}>
+                    {item.length > 25 ? item.slice(0, 25) + '...' : item}{' '}
+                    <button
+                      className="delete is-medium"
+                      onClick={() => this.deleteWish(idx)}
+                    />
+                  </li>
+                );
               })}
           </ul>
         </div>
         <style jsx>
           {`
+            .delete:hover {
+              background: rgb(229, 26, 102)
+              transition: 0.25s;
+            }
             .tag {
               margin-top: 0.5rem;
+            }
+            .wish {
+              margin-top: 0.25rem;
+              display: flex;
+              justify-content: space-between;
             }
           `}
         </style>

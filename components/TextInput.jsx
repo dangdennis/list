@@ -6,10 +6,11 @@ class TextInput extends React.Component {
       <div className="field has-addons">
         <div className="control is-expanded">
           <input
+            aria-label="Enter your name to create a wishlist"
             className="input is-primary"
             name="name"
             type="text"
-            placeholder="Enter name"
+            placeholder="Enter your name"
             onChange={this.props.handleChange}
             onKeyPress={this.props.handleKeyPress}
             value={this.props.text}
@@ -21,7 +22,7 @@ class TextInput extends React.Component {
             onClick={this.props.handleWishClick}
             className={`button is-info ${this.props.loading && 'is-loading'}`}
           >
-            Wish!
+            Create Wistlist
           </button>
         </div>
       </div>

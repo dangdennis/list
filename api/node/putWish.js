@@ -1,9 +1,8 @@
-const env = require('dotenv').config();
+require('dotenv').config();
 const config = require('../config');
 const AWS = require('aws-sdk');
 const uuid = require('uuid/v4');
 const { json, send } = require('micro');
-console.log(env);
 
 AWS.config.update({
   region: 'us-west-2',
@@ -15,26 +14,14 @@ AWS.config.update({
 
 const ddb = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
 
-let mockParams = {
-  TableName: config.TABLE_NAME,
-  Item: {
-    user_id: { S: uuid() },
-    time_stamp: { N: String(Date.now()) },
-    wishlist: { L: new Array(3).fill(null).map(item => ({ S: 'asdfasf' })) },
-    name: {
-      S: 'Mock user' + uuid()
-    }
-  }
-};
-
 module.exports = async (req, res) => {
+  console.log('PUT WISH')
   try {
     const data = await json(req);
-    console.log('json data: ', data);
 
-    let wishes = [];
-    if (data.wishes && data.wishes.length) {
-      wishes = data.wishes.map(wish => {
+    let wishlist = [];
+    if (data.wishlist && data.wishlist.length) {
+      wishlist = data.wishlist.map(wish => {
         return {
           S: wish
         };
@@ -46,7 +33,7 @@ module.exports = async (req, res) => {
       Item: {
         user_id: { S: data.user_id ? String(data.user_id) : String(uuid()) },
         time_stamp: { N: String(Date.now()) },
-        wishlist: { L: wishes },
+        wishlist: { L: wishlist },
         name: {
           S: data.name
         }

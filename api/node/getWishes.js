@@ -1,8 +1,7 @@
-const env = require('dotenv').config();
+require('dotenv').config();
 const config = require('../config');
 const AWS = require('aws-sdk');
 const { send } = require('micro');
-console.log(env);
 
 AWS.config.update({
   region: 'us-west-2',
@@ -24,7 +23,7 @@ module.exports = (req, res) => {
     if (err) {
       send(res, 500, err);
     } else {
-      // Items is returned as an array
+      // res.Items is returned as an array
       if (data.Items && data.Items.length) {
         // Unmarshall, aka reformat, the results to regular JSON format
         let unmarshalled = data.Items.map(item =>
