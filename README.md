@@ -1,7 +1,7 @@
 ## Christmas wishlist utilizing Zeit's Now V2 lambdas against DynamoDB
 
 ### Tech stack
-* Nextjs + React hooks
+* Nextjs
 * Now V2
 * DynamoDB
 
