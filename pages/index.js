@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import TextInput from '../components/TextInput';
 import Wishes from '../components/Wishes';
@@ -156,6 +157,9 @@ export default class IndexPage extends React.Component {
   render() {
     return (
       <main className="main">
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
         <div className="main-content">
           <Navbar />
           <h1 className="title is-2" style={{ textAlign: 'center' }}>
