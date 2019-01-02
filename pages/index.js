@@ -27,20 +27,24 @@ const handle_axios_error = function(err) {
 axios.interceptors.response.use(r => r, handle_axios_error);
 
 export default class IndexPage extends React.Component {
-  static async getInitialProps({ req }) {
-    try {
-      const { data } = await axios.get(
-        `${DEV && 'http://localhost:8004'}/api/node/wishes`
-      );
-      if (data && data.Items && data.Items.length) {
-        return {
-          wishers: [...data.Items]
-        };
-      }
-    } catch (error) {
-      return { error };
-    }
-  }
+  // Not SSR wish items due to some issue with fetching SSR
+  // static async getInitialProps({ req }) {
+  //   try {
+  //     console.log('Get initial wishlists');
+  //     const { data } = await axios.get(
+  //       // Using ternary because NextJS is not shortcuiting DEV && 'http://localhost:8004/' properly
+  //       `${DEV ? 'http://localhost:8004/' : ''}api/node/wishes`
+  //     );
+  //     console.log('Initial wishlist data', data);
+  //     if (data && data.Items && data.Items.length) {
+  //       return {
+  //         wishers: [...data.Items]
+  //       };
+  //     }
+  //   } catch (error) {
+  //     return { error };
+  //   }
+  // }
 
   constructor(props) {
     super(props);
@@ -50,6 +54,24 @@ export default class IndexPage extends React.Component {
       loading: false,
       wishers: props.wishers || []
     };
+  }
+
+  // Move fetch from getInitialProps since that static method doesn't seem to run. It seems to be
+  // failing on line 33, the axios call
+  async componentDidMount() {
+    try {
+      console.log('Get initial wishlists');
+      const { data } = await axios.get(
+        // Using ternary because NextJS is not shortcuiting DEV && 'http://localhost:8004/' properly
+        `${DEV ? 'http://localhost:8004/' : ''}api/node/wishes`
+      );
+      console.log('Initial wishlist data', data);
+      if (data && data.Items && data.Items.length) {
+        this.setState({ wishers: [...data.Items] });
+      }
+    } catch (error) {
+      this.setState({ error: true });
+    }
   }
 
   // Handles the main text input
@@ -77,7 +99,7 @@ export default class IndexPage extends React.Component {
     this.setState({ loading: true, error: false });
     try {
       const res = await axios.post(
-        `${DEV && 'http://localhost:8004'}/api/node/wish`,
+        `${DEV ? 'http://localhost:8004/' : ''}api/node/wish`,
         {
           name,
           wishes: []
@@ -102,11 +124,14 @@ export default class IndexPage extends React.Component {
 
   deleteWisher = async id => {
     try {
-      await axios.delete(`${DEV && 'http://localhost:8004'}/api/node/wish/delete`, {
-        data: {
-          user_id: id
+      await axios.delete(
+        `${DEV ? 'http://localhost:8004/' : ''}api/node/wish/delete`,
+        {
+          data: {
+            user_id: id
+          }
         }
-      });
+      );
       const wishers = this.state.wishers.filter(
         wisher => wisher.user_id !== id
       );

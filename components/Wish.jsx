@@ -45,7 +45,7 @@ class Wish extends React.Component {
   async putWish() {
     try {
       await axios.post(
-        `${DEV && 'http://localhost:8004'}/api/node/wish`,
+        `${DEV ? 'http://localhost:8004/' : ''}api/node/wish`,
         this.createWish()
       );
     } catch (e) {
