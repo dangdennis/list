@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
     if (!data.user_id) {
       send(res, 500, { message: 'No user id' });
     }
-    console.log('data', data)
 
     let params = {
       TableName: config.TABLE_NAME,

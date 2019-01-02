@@ -94,7 +94,7 @@ class Wish extends React.Component {
               this.state.wishes.map((item, idx) => {
                 return (
                   <li className="wish" key={item + idx}>
-                    {item.length > 25 ? item.slice(0, 25) + '...' : item}{' '}
+                    {item.length > 35 ? item.slice(0, 35) + '...' : item}{' '}
                     <button
                       className="delete is-medium"
                       onClick={() => this.deleteWish(idx)}

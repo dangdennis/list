@@ -188,7 +188,7 @@ export default class IndexPage extends React.Component {
         </div>
         <style jsx>{`
           .main {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 24px;
           }

@@ -8,8 +8,8 @@ export default class Wishes extends Component {
         {this.props.wishers.length > 0 &&
           this.props.wishers.map((wisher, idx) => {
             let name = wisher.name;
-            if (name.length > 15) {
-              name = name.slice(0, 15) + '...';
+            if (name.length > 25) {
+              name = name.slice(0, 25) + '...';
             }
             return (
               <div key={wisher.user_id + idx} className="grid-item">
@@ -27,10 +27,14 @@ export default class Wishes extends Component {
         <style jsx>{`
           .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             grid-gap: 20px;
             justify-items: center;
             align-items: start;
+          }
+
+          .grid-item {
+            width: 100%;
           }
 
           .title {
