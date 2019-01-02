@@ -15,7 +15,7 @@ AWS.config.update({
 const ddb = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
 
 module.exports = async (req, res) => {
-  console.log('PUT WISH')
+  console.log('PUT WISH');
   try {
     const data = await json(req);
 
@@ -28,10 +28,12 @@ module.exports = async (req, res) => {
       });
     }
 
+    let uniqueId = String(uuid());
+
     let params = {
       TableName: config.TABLE_NAME,
       Item: {
-        user_id: { S: data.user_id ? String(data.user_id) : String(uuid()) },
+        user_id: { S: data.user_id ? String(data.user_id) : uniqueId },
         time_stamp: { N: String(Date.now()) },
         wishlist: { L: wishlist },
         name: {
@@ -46,7 +48,7 @@ module.exports = async (req, res) => {
         send(res, 500, err);
       } else {
         console.log('Success', data);
-        send(res, 200, data);
+        send(res, 200, { ...data, user_id: uniqueId, name: data.name });
       }
     });
   } catch (e) {

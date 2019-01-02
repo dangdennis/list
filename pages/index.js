@@ -105,11 +105,12 @@ export default class IndexPage extends React.Component {
           wishes: []
         }
       );
-      console.log('post success', res);
+
+      let user_id = res.data.user_id;
       this.setState({
         loading: false,
         name: '',
-        wishers: [...this.state.wishers, this._formatWisher(name)]
+        wishers: [...this.state.wishers, this._formatWisher({ name, user_id })]
       });
     } catch (e) {
       console.error('post fail', e);
@@ -117,7 +118,7 @@ export default class IndexPage extends React.Component {
         loading: false,
         name: '',
         error: true,
-        wishers: [...this.state.wishers, this._formatWisher(name)]
+        wishers: [...this.state.wishers, this._formatWisher({ name })]
       });
     }
   }
@@ -143,10 +144,10 @@ export default class IndexPage extends React.Component {
   };
 
   // Formats the wish into compatible format
-  _formatWisher(name) {
+  _formatWisher({ name, user_id = '' }) {
     return {
       time_stamp: Date.now(),
-      user_id: '',
+      user_id,
       name,
       wishlist: []
     };
