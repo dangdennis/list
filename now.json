@@ -25,6 +25,10 @@
       "src": "/api/node/wish",
       "dest": "/api/node/putWish.js",
       "methods": ["POST"]
+    },
+    {
+      "src": "/api/go/wish",
+      "dest": "/api/go/getWishes.go"
     }
   ]
 }
