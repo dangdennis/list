@@ -3,7 +3,8 @@
   "name": "wishlist",
   "builds": [
     { "src": "next.config.js", "use": "@now/next" },
-    { "src": "api/node/*.js", "use": "@now/node" }
+    { "src": "api/node/*.js", "use": "@now/node" },
+    { "src": "api/go/*.go", "use": "@now/go" }
   ],
   "env": {
     "AWS_DDB_ACCESS_KEY": "@aws_access_key",
