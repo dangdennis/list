@@ -11,5 +11,7 @@ module.exports = (phase, { defaultConfig }) => {
   }
   // const withCSS = require('@zeit/next-css');
   const withSASS = require('@zeit/next-sass');
-  return withSASS();
+  return withSASS({
+    target: 'serverless'
+  });
 };

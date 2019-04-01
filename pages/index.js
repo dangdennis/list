@@ -163,7 +163,7 @@ export default class IndexPage extends React.Component {
         <div className="main-content">
           <Navbar />
           <h1 className="title is-2" style={{ textAlign: 'center' }}>
-            Make some damn wishes
+            Fail Tracker
           </h1>
           <div className="main-input">
             <TextInput
