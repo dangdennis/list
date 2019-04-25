@@ -1,4 +1,4 @@
-## Christmas wishlist utilizing Zeit's Now V2 lambdas against DynamoDB
+## CRUD list utilizing Zeit's Now V2 lambdas against DynamoDB
 
 ### Tech stack
 * Nextjs
